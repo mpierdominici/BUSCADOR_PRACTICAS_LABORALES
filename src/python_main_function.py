@@ -1,8 +1,7 @@
 from practicasLaboralesList import  practicasLaboralesList
-
+from plGui import plGui
 def main():
-    pl = practicasLaboralesList("../data/db.csv")
-    print(pl.listaPracticasLaborales[6].tags[0])
+    g=plGui("../data/db.csv")
 
 if __name__ == '__main__':
     main()
