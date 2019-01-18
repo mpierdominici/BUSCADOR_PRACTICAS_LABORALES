@@ -55,12 +55,24 @@ class plGui:
         print("clock")
 
     def tags(self):
+        tempSet = set()
+        tempList = []
         self.textbbuscar.set("Buscar")
         self.buscarb.pack()
         self.listbox.delete(0, END) #borro el contenido del listbox
         self.listbox.config(selectmode=MULTIPLE)
+        self.lbContent = self.pllista.listaPracticasLaborales
+        for row in self.lbContent:
+            for subr in row.tags:
+                tempSet.add(str(subr))
 
-
+        tempList = list(tempSet)
+        tempList.sort()
+        tempList.reverse()
+        for row in tempList:
+            i = 0
+            self.listbox.insert(i, row)
+            i = i + 1
 
 
         self.listbox.pack()
@@ -70,7 +82,7 @@ class plGui:
     def empresa(self):
         tempSet=set()
         tempList=[]
-        self.textbbuscar.set("Abrir")
+        self.textbbuscar.set("Buscar")
         self.buscarb.pack()
         self.listbox.delete(0, END)
         self.listbox.config(selectmode=SINGLE)
@@ -79,9 +91,6 @@ class plGui:
         self.lbContent.reverse()
         for row in self.lbContent:
             tempSet.add(row.empresa)
-            #i=0
-            #self.listbox.insert(i, row.empresa)
-            #i=i+1
         tempList=list(tempSet)
         tempList.sort()
         tempList.reverse()
@@ -92,7 +101,7 @@ class plGui:
 
         self.listbox.pack()
 
-        print("empresa")
+
 
     def ayn(self):
         self.textbbuscar.set("Abrir")
@@ -107,7 +116,7 @@ class plGui:
         self.listbox.config(selectmode=SINGLE)
 
         self.listbox.pack()
-        print("ayn")
+
 
     def buscar(self):
         print("buscar")
