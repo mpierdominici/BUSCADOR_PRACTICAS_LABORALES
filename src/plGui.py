@@ -11,7 +11,8 @@ class plGui:
         self.gui = Tk()
         self.gui.title("Buscador de practicas laborales - ITBA - GEDA")
         self.currEstate = "empresa"
-        self.lbContent=[]
+        self.lbContent = []
+        self.estado = str()
         self.frameSup = Frame(self.gui)
         self.frameSup.pack(side=TOP,fill=BOTH, expand=True)
 
@@ -55,8 +56,9 @@ class plGui:
         print("clock")
 
     def tags(self):
+        self.estado="tags"
         tempSet = set()
-        tempList = []
+
         self.textbbuscar.set("Buscar")
         self.buscarb.pack()
         self.listbox.delete(0, END) #borro el contenido del listbox
@@ -66,44 +68,44 @@ class plGui:
             for subr in row.tags:
                 tempSet.add(str(subr))
 
-        tempList = list(tempSet)
-        tempList.sort()
-        tempList.reverse()
-        for row in tempList:
+        self.lbContent = list(tempSet)
+        self.lbContent.sort()
+        self.lbContent.reverse()
+        for row in self.lbContent:
             i = 0
             self.listbox.insert(i, row)
             i = i + 1
 
-
+        self.lbContent.reverse()
         self.listbox.pack()
 
 
 
     def empresa(self):
         tempSet=set()
-        tempList=[]
+        self.estado = "empresa"
         self.textbbuscar.set("Buscar")
         self.buscarb.pack()
         self.listbox.delete(0, END)
         self.listbox.config(selectmode=SINGLE)
 
-        self.lbContent=sorted(self.pllista.listaPracticasLaborales, key=lambda practicaLaboral:practicaLaboral.empresa)
-        self.lbContent.reverse()
+        self.lbContent = self.pllista.listaPracticasLaborales
         for row in self.lbContent:
             tempSet.add(row.empresa)
-        tempList=list(tempSet)
-        tempList.sort()
-        tempList.reverse()
-        for row in tempList:
+        self.lbContent=list(tempSet)
+        self.lbContent.sort()
+        self.lbContent.reverse()
+        for row in self.lbContent:
             i=0
             self.listbox.insert(i, row)
             i=i+1
-
+        self.lbContent.reverse()
         self.listbox.pack()
 
 
 
     def ayn(self):
+        self.estado = "ayn"
         self.textbbuscar.set("Abrir")
         self.buscarb.pack()
         self.listbox.delete(0, END)
@@ -114,11 +116,62 @@ class plGui:
             self.listbox.insert(i, row.apellido +" " + row.nombre+"("+str(row.legajo)+")")
             i=i+1
         self.listbox.config(selectmode=SINGLE)
-
+        self.lbContent.reverse()
         self.listbox.pack()
 
 
     def buscar(self):
-        print("buscar")
+        self.listbox.config(selectmode=SINGLE)
+        selectedItemList=[]
+        itemSerched=[]
+        selectedItem=self.listbox.curselection()
+        for i in selectedItem: #creo un vector con la informacion seleccionada
+            selectedItemList.append(self.lbContent[i])
 
+        if self.estado == "ayn":
+            print(selectedItemList[0].apellido)
+
+
+        elif self.estado =="tags" :
+            self.textbbuscar.set("Abrir")
+
+            for i in selectedItemList:
+                for j in self.pllista.listaPracticasLaborales:
+                    if  i in j.tags:
+                        itemSerched.append(j)
+
+
+
+
+
+
+
+            print("tags")
+
+        elif self.estado =="empresa" :
+            self.textbbuscar.set("Abrir")
+
+            for i in selectedItemList:
+                for j in self.pllista.listaPracticasLaborales:
+                    if  i in j.empresa:
+                        itemSerched.append(j)
+
+
+        elif self.estado =="abrir":
+            print("abrir")
+
+        if self.estado=="empresa" or self.estado=="tags":
+            self.estado = "abrir"
+            self.listbox.delete(0, END)
+            self.lbContent=itemSerched
+            self.lbContent = sorted( self.lbContent,
+                                    key=lambda practicaLaboral: practicaLaboral.apellido)
+            self.lbContent.reverse()
+            for row in self.lbContent:
+                i = 0
+                self.listbox.insert(i, row.apellido + " " + row.nombre + "(" + str(row.legajo) + ")")
+                i = i + 1
+            self.listbox.config(selectmode=SINGLE)
+            self.lbContent.reverse()
+            self.listbox.pack()
 
