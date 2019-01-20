@@ -1,12 +1,15 @@
 from tkinter import *
 from tkinter import ttk
 from practicasLaboralesList import practicasLaboralesList
+from openPdf import  pdfOpen
 from practicaLaboral import practicaLaboral
 class plGui:
 
     def __init__(self, path):
-
+        file=open("../data/config.conf")
         self.pllista=practicasLaboralesList(path)
+        self.pathPract=file.readline()
+        file.close()
 
         self.gui = Tk()
         self.gui.title("Buscador de practicas laborales - ITBA - GEDA")
@@ -129,7 +132,8 @@ class plGui:
             selectedItemList.append(self.lbContent[i])
 
         if self.estado == "ayn":
-            print(selectedItemList[0].apellido)
+            pdfOpen(self.pathPract+selectedItemList[0].nombre_archivo)
+
 
 
         elif self.estado =="tags" :
@@ -142,30 +146,23 @@ class plGui:
 
 
 
-
-
-
-
-            print("tags")
-
         elif self.estado =="empresa" :
             self.textbbuscar.set("Abrir")
 
             for i in selectedItemList:
                 for j in self.pllista.listaPracticasLaborales:
-                    if  i in j.empresa:
+                    if i in j.empresa:
                         itemSerched.append(j)
 
 
         elif self.estado =="abrir":
-            print("abrir")
+            pdfOpen(self.pathPract + selectedItemList[0].nombre_archivo)
 
         if self.estado=="empresa" or self.estado=="tags":
             self.estado = "abrir"
             self.listbox.delete(0, END)
             self.lbContent=itemSerched
-            self.lbContent = sorted( self.lbContent,
-                                    key=lambda practicaLaboral: practicaLaboral.apellido)
+            self.lbContent = sorted( self.lbContent, key=lambda practicaLaboral: practicaLaboral.apellido)
             self.lbContent.reverse()
             for row in self.lbContent:
                 i = 0
