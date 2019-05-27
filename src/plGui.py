@@ -1,11 +1,14 @@
 from tkinter import *
 from tkinter import ttk
+from tkinter import font
 from practicasLaboralesList import practicasLaboralesList
 from openPdf import  pdfOpen
 from practicaLaboral import practicaLaboral
+LARGE_FONT = ("Bahnschrift", 20)
 class plGui:
 
     def __init__(self, path):
+        self.sizef=15
         file=open("../data/config.conf")
         self.pllista=practicasLaboralesList(path)
         self.pathPract=file.readline()
@@ -24,11 +27,11 @@ class plGui:
 
         self.titulo = ttk.Label(self.frameSup, text="Dpartamento de ingenieria electronica - informe de practica laboral")
         self.srcollBar = Scrollbar(self.frameInf)
-        self.empresab = ttk.Button(self.frameSup, text="Empresa", command=self.empresa)
-        self.tagsb = ttk.Button(self.frameSup, text="Tags", command=self.tags)
-        self.anb = ttk.Button(self.frameSup, text="Apellido y Nombre", command=self.ayn)
+        self.empresab = Button(self.frameSup,font=("Bahnschrift", self.sizef), text="Empresa", command=self.empresa)
+        self.tagsb = Button(self.frameSup,font=("Bahnschrift", self.sizef), text="Tags", command=self.tags)
+        self.anb = Button(self.frameSup, text="Apellido y Nombre", command=self.ayn,font=("Bahnschrift", self.sizef))
         self.textbbuscar = StringVar()
-        self.buscarb = ttk.Button(self.frameInf, textvariable=self.textbbuscar, command=self.buscar)
+        self.buscarb = Button(self.frameInf, textvariable=self.textbbuscar,font=("Bahnschrift", self.sizef), command=self.buscar)
         self.textbbuscar.set("Buscar")
 
 
@@ -156,7 +159,7 @@ class plGui:
 
 
         elif self.estado =="abrir":
-            pdfOpen(self.pathPract + selectedItemList[0].nombre_archivo)
+            pdfOpen(self.pathPract + selectedItemList[0].nombre_archivo+'"')
 
         if self.estado=="empresa" or self.estado=="tags":
             self.estado = "abrir"
